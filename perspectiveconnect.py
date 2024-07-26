@@ -53,48 +53,12 @@ def process_presentation(audio):
     
     return transcription, feedback, audio_feedback_path
 
-def transcribe(audio):
-    global input_messages
-
-    audio_file = open(audio, "rb")
-    transcription = client.audio.transcriptions.create(
-      model="whisper-1", 
-      file=audio_file, 
-      response_format="text"
-    )
-    print(transcription)
-
-    input_messages.append({"role": "user", "content": transcription})
-
-    stream = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=input_messages,
-        stream=True,
-    )
-    response = ""
-    for chunk in stream:
-        if chunk.choices[0].delta.content is not None:
-            response += " " + chunk.choices[0].delta.content
-
-    #for line in response.splitlines():
-    #    print(line)
-    #    subprocess.call(["wsay", line])
-
-    chat_transcript = ""
-    for message in input_messages:
-        if message['role'] != 'system':
-            chat_transcript += message['role'] + ": " + message['content'] + "\n\n"
-
-    chat_transcript += "Response from AI: " + response
-
-    return chat_transcript
-
 ui = gr.Interface(fn=process_presentation, 
                 inputs=gr.Audio(sources=["microphone"], type="filepath"), 
                 outputs=[
-                    gr.Textbox(label="Transcription"),
-                    gr.Textbox(label="Feedback"),
-                    gr.Audio(label="Audio Feedback", type="filepath")
+                    gr.Textbox(label="Presentation"),
+                    gr.Textbox(label="AI Response"),
+                    gr.Audio(label="Audio Ai Response", type="filepath")
                 ],
                 title="AI Presentation Trainer",
                 description="Practise your presentation to get transcription, feedback, and audio feedback."
