@@ -2,12 +2,30 @@ import gradio as gr
 import speech_recognition as sr
 from openai import OpenAI
 from gtts import gTTS
+import random
+import string
+import time
 
 #input_messages = [{"role": "system", "content": 'You are a knowledgeable and helpful intelligent chat robot. Your task is to chat with me. Please use a short conversational style and speak in Chinese. Each answer should not exceed 50 words!'}]
 input_messages = [{"role": "system", "content": 'Please criticize the content and delivery my presentation and give constructive feedback for improvement!'}]
 
 
 client = OpenAI(api_key='sk-aichoicesservice-OFNmT1NXrWnmZB3262bYT3BlbkFJv3hIZDbp4I1M6yAfocNq')
+
+def generate_ai_response_file_path(length=10):
+    # Get the current timestamp
+    timestamp = time.time()
+    
+    # Seed the random number generator with the timestamp
+    random.seed(timestamp)
+    
+    # Define the character set for the random string
+    characters = string.ascii_letters + string.digits
+    
+    # Generate the random string
+    ai_response_file_path = ''.join(random.choice(characters) for _ in range(length))
+    
+    return ai_response_file_path
 
 def transcribe_audio(audio_path):
     recognizer = sr.Recognizer()
@@ -37,7 +55,7 @@ def get_feedback(transcription):
 
 def text_to_speech(response):
     tts = gTTS(text=response, lang='en')
-    audio_path = "feedback.mp3"
+    audio_path = generate_ai_response_file_path() + ".mp3"
     tts.save(audio_path)
     return audio_path
 
