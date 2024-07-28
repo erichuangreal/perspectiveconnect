@@ -25,22 +25,3 @@
 7) pip install gtts
 
 8) pip install SpeechRecognition
-
-
-9) if running perspectiveconnect remotely, need ngrok proxy for audio streamming by microphone
-	Install ngrok on ubuntu server
-	Download and install ngrok
-	wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
-	tar -xvzf ngrok-v3-stable-linux-amd64.tgz
-	sudo mv ngrok /usr/local/bin/ngrok
-
-
-	 Make sure /usr/local/bin is in your PATH:
-	echo $PATH
-
-
-	Run the below command
-	ngrok config add-authtoken 2jgvxcmWBoUGvQhq51dlzc25rlU_2dph3xFYY1793wzTYy3wK
-
-	ngrok http 7860
-
