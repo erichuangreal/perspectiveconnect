@@ -5,6 +5,7 @@ from gtts import gTTS
 import random
 import string
 import time
+import os
 
 #input_messages = [{"role": "system", "content": 'You are a knowledgeable and helpful intelligent chat robot. Your task is to chat with me. Please use a short conversational style and speak in Chinese. Each answer should not exceed 50 words!'}]
 input_messages = [{"role": "system", "content": 'Please criticize the content and delivery my presentation and give constructive feedback for improvement!'}]
@@ -27,15 +28,23 @@ def generate_ai_response_file_path(length=10):
     
     return ai_response_file_path
 
-def transcribe_audio(audio_path):
+# Function to transcribe audio with a retry mechanism
+def transcribe_audio(audio_path, retries=5, delay=2):
     recognizer = sr.Recognizer()
-    with sr.AudioFile(audio_path) as source:
-        audio_data = recognizer.record(source)
-    try:
-        transcription = recognizer.recognize_google(audio_data)
-    except sr.UnknownValueError:
-        transcription = "Audio not clear enough to transcribe."
-    return transcription
+    for attempt in range(retries):
+        if audio_path is not None and os.path.exists(audio_path):
+            try:
+                with sr.AudioFile(audio_path) as source:
+                    audio_data = recognizer.record(source)
+                transcription = recognizer.recognize_google(audio_data)
+                return transcription
+            except sr.UnknownValueError:
+                print("Audio not clear enough to transcribe.")
+                return ""
+        else:
+            print(f"Attempt {attempt + 1}/{retries}: Audio file not available, retrying in {delay} seconds...")
+            time.sleep(delay)
+    return "Audio file not available after multiple attempts."
 
 def get_feedback(transcription):
     global input_messages
@@ -72,7 +81,7 @@ def process_presentation(audio):
     return transcription, feedback, audio_feedback_path
 
 ui = gr.Interface(fn=process_presentation, 
-                inputs=gr.Audio(sources=["microphone"], type="filepath"), 
+                inputs=gr.Audio(sources=["microphone"],  type="filepath"), 
                 outputs=[
                     gr.Textbox(label="Presentation"),
                     gr.Textbox(label="AI Response"),
@@ -82,4 +91,4 @@ ui = gr.Interface(fn=process_presentation,
                 description="Practise your presentation to get transcription, feedback, and audio feedback."
             )
 #ui.launch(auth=(server_name="0.0.0.0", server_port=7860, "test", "eric123321!"), share=True)
-ui.launch(server_name="0.0.0.0", server_port=7860)
+ui.launch(share=True, server_name="0.0.0.0", server_port=7860)
