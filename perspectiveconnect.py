@@ -6,6 +6,10 @@ import random
 import string
 import time
 import os
+import librosa
+import numpy as np
+import matplotlib.pyplot as plt
+import parselmouth
 
 #input_messages = [{"role": "system", "content": 'You are a knowledgeable and helpful intelligent chat robot. Your task is to chat with me. Please use a short conversational style and speak in Chinese. Each answer should not exceed 50 words!'}]
 input_messages = [{"role": "system", "content": 'Please criticize the content and delivery my presentation and give constructive feedback for improvement!'}]
@@ -72,13 +76,108 @@ def process_presentation(audio):
     # Step 1: Transcribe audio
     transcription = transcribe_audio(audio)
     
-    # Step 2: Get feedback from GPT-3.5
-    feedback = get_feedback(transcription)
+    # Step 2: Extract audio qualities
+    audio_qualities = extracting_audio_qualities(audio)
+    prompt = prepare_prompt(transcription, audio_qualities)
+    print(prompt)
+    # Step 3: Get feedback
+    feedback = get_feedback(prompt)
     
-    # Step 3: Convert feedback to speech
+    # Step 4: Convert feedback to speech
     audio_feedback_path = text_to_speech(feedback)
     
-    return transcription, feedback, audio_feedback_path
+    
+    return transcription, feedback, audio_feedback_path, audio_qualities
+
+def extracting_audio_qualities(audio) :
+    y, sr = librosa.load(audio)
+    
+    # Pitch analysis (fundamental frequency)
+    pitches, magnitudes = librosa.core.piptrack(y=y, sr=sr)
+    pitch = []
+    for t in range(pitches.shape[1]):
+        index = magnitudes[:, t].argmax()
+        pitch.append(pitches[index, t])
+    pitch = np.array([p for p in pitch if p > 0])
+
+    # Loudness analysis
+    S = np.abs(librosa.stft(y))
+    loudness = librosa.amplitude_to_db(S, ref=np.max)
+
+    # Timbre analysis
+    spectral_centroid = librosa.feature.spectral_centroid(y=y, sr=sr)
+    spectral_bandwidth = librosa.feature.spectral_bandwidth(y=y, sr=sr)
+    mfccs = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=13)
+    spectral_flatness = librosa.feature.spectral_flatness(y=y).mean()
+    spectral_contrast = librosa.feature.spectral_contrast(y=y, sr=sr).mean(axis=1)
+    spectral_rolloff = librosa.feature.spectral_rolloff(y=y, sr=sr, roll_percent=0.85).mean()
+
+    # Speech rate analysis (tempo in syllables per second)
+    onset_env = librosa.onset.onset_strength(y=y, sr=sr)
+    syllable_count = np.sum(onset_env > np.mean(onset_env))
+    total_duration = librosa.get_duration(y=y, sr=sr)
+    syllables_per_second = syllable_count / total_duration
+
+    # Jitter, Shimmer, HNR (Sometimes the parselmouth.praat.call method throws an error because the snd object
+    # is not compatible with the function, help fix this issue)
+    """ snd = parselmouth.Sound(audio)
+    print(f"Audio duration: {snd.get_total_duration()} seconds")
+    print(f"Sampling frequency: {snd.get_sampling_frequency()} Hz")
+    
+    try:
+        point_process = parselmouth.praat.call(snd, "To PointProcess (periodic, cc)")
+        jitter = parselmouth.praat.call(point_process, "Get jitter (local)", 0, 0, 0.0001, 0.02, 1.3)
+        shimmer = parselmouth.praat.call([snd, point_process], "Get shimmer (local)", 0, 0, 0.0001, 0.02, 1.3)
+        hnr = parselmouth.praat.call(snd, "To Harmonicity (cc)", 0.01, 75, 0.1, 1.0).mean()
+    except parselmouth.PraatError as e:
+        print(f"Error processing audio qualities: {e}")
+        jitter = shimmer = hnr = None"""
+
+    # Results
+    results = {
+        "pitch_mean": np.mean(pitch),
+        "pitch_std": np.std(pitch),
+        "loudness_mean": np.mean(loudness),
+        "loudness_std": np.std(loudness),
+        "spectral_centroid_mean": np.mean(spectral_centroid),
+        "spectral_bandwidth_mean": np.mean(spectral_bandwidth),
+        "mfccs_mean": np.mean(mfccs, axis=1),
+        "syllables_per_second": syllables_per_second,
+        
+        #"spectral_flatness_mean": spectral_flatness,
+        #"spectral_contrast_mean": spectral_contrast.tolist(),
+        #"spectral_rolloff_mean": spectral_rolloff,
+        #"jitter": jitter,
+        #"shimmer": shimmer,
+        #"hnr": hnr
+    }
+    
+    return results
+
+def prepare_prompt(transcription, voice_features):
+    prompt = f"""
+    Presentation Text:
+    {transcription}
+
+    Voice Features:
+    - Pitch Mean: {voice_features['pitch_mean']}
+    - Pitch Std: {voice_features['pitch_std']}
+    - Loudness Mean: {voice_features['loudness_mean']}
+    - Loudness Std: {voice_features['loudness_std']}
+    - Spectral Centroid Mean: {voice_features['spectral_centroid_mean']}
+    - Spectral Bandwidth Mean: {voice_features['spectral_bandwidth_mean']}
+    - MFCCs Mean: {voice_features['mfccs_mean']}
+    - Syllables Per Second: {voice_features['syllables_per_second']}
+    - Spectral Flatness Mean: {voice_features['spectral_flatness_mean']}
+    - Spectral Contrast Mean: {voice_features['spectral_contrast_mean']}
+    - Spectral Rolloff Mean: {voice_features['spectral_rolloff_mean']}
+    - Jitter: {voice_features['jitter']}
+    - Shimmer: {voice_features['shimmer']}
+    - Harmonics-to-Noise Ratio: {voice_features['hnr']}
+
+    Please evaluate the presentation based on the provided text and voice features.
+    """
+    return prompt
 
 ui = gr.Interface(fn=process_presentation, 
                 inputs=gr.Audio(sources=["microphone"],  type="filepath"), 
@@ -88,7 +187,7 @@ ui = gr.Interface(fn=process_presentation,
                     gr.Audio(label="Audio Ai Response", type="filepath")
                 ],
                 title="AI Presentation Trainer",
-                description="Practise your presentation to get transcription, feedback, and audio feedback."
+                description="Practice your presentation to get transcription, feedback, and audio feedback."
             )
 #ui.launch(auth=(server_name="0.0.0.0", server_port=7860, "test", "eric123321!"), share=True)
 ui.launch(share=True, server_name="0.0.0.0", server_port=7860)
