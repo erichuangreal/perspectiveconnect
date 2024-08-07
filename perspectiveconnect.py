@@ -168,15 +168,16 @@ def prepare_prompt(transcription, voice_features):
     - Spectral Bandwidth Mean: {voice_features['spectral_bandwidth_mean']}
     - MFCCs Mean: {voice_features['mfccs_mean']}
     - Syllables Per Second: {voice_features['syllables_per_second']}
-    - Spectral Flatness Mean: {voice_features['spectral_flatness_mean']}
-    - Spectral Contrast Mean: {voice_features['spectral_contrast_mean']}
-    - Spectral Rolloff Mean: {voice_features['spectral_rolloff_mean']}
-    - Jitter: {voice_features['jitter']}
-    - Shimmer: {voice_features['shimmer']}
-    - Harmonics-to-Noise Ratio: {voice_features['hnr']}
-
-    Please evaluate the presentation based on the provided text and voice features.
     """
+    #- Spectral Flatness Mean: {voice_features['spectral_flatness_mean']}
+    #- Spectral Contrast Mean: {voice_features['spectral_contrast_mean']}
+    #- Spectral Rolloff Mean: {voice_features['spectral_rolloff_mean']}
+    #- Jitter: {voice_features['jitter']}
+    #- Shimmer: {voice_features['shimmer']}
+    #- Harmonics-to-Noise Ratio: {voice_features['hnr']}
+
+    #Please evaluate the presentation based on the provided text and voice features.
+
     return prompt
 
 ui = gr.Interface(fn=process_presentation, 
