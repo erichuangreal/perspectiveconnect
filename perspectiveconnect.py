@@ -11,8 +11,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import parselmouth
 
-#input_messages = [{"role": "system", "content": 'You are a knowledgeable and helpful intelligent chat robot. Your task is to chat with me. Please use a short conversational style and speak in Chinese. Each answer should not exceed 50 words!'}]
-input_messages = [{"role": "system", "content": 'Please criticize the content and delivery my presentation and give constructive feedback for improvement!'}]
+# Define the input messages for the AI chat model
+input_messages = [{"role": "system", "content": """Please give me specific and actionable feedback for my
+                   presentation. I want areas to improve in both technical and delivery aspects. Can you also
+                   give me specific examples to improve in. You should take quotes from the presentation and
+                   analyze their faults.
+                   """}]
 
 
 client = OpenAI(api_key='sk-aichoicesservice-OFNmT1NXrWnmZB3262bYT3BlbkFJv3hIZDbp4I1M6yAfocNq')
@@ -143,10 +147,9 @@ def extracting_audio_qualities(audio) :
         "spectral_bandwidth_mean": np.mean(spectral_bandwidth),
         "mfccs_mean": np.mean(mfccs, axis=1),
         "syllables_per_second": syllables_per_second,
-        
-        #"spectral_flatness_mean": spectral_flatness,
-        #"spectral_contrast_mean": spectral_contrast.tolist(),
-        #"spectral_rolloff_mean": spectral_rolloff,
+        "spectral_flatness_mean": spectral_flatness,
+        "spectral_contrast_mean": spectral_contrast.tolist(),
+        "spectral_rolloff_mean": spectral_rolloff,
         #"jitter": jitter,
         #"shimmer": shimmer,
         #"hnr": hnr
@@ -168,10 +171,10 @@ def prepare_prompt(transcription, voice_features):
     - Spectral Bandwidth Mean: {voice_features['spectral_bandwidth_mean']}
     - MFCCs Mean: {voice_features['mfccs_mean']}
     - Syllables Per Second: {voice_features['syllables_per_second']}
+    - Spectral Flatness Mean: {voice_features['spectral_flatness_mean']}
+    - Spectral Contrast Mean: {voice_features['spectral_contrast_mean']}
+    - Spectral Rolloff Mean: {voice_features['spectral_rolloff_mean']}
     """
-    #- Spectral Flatness Mean: {voice_features['spectral_flatness_mean']}
-    #- Spectral Contrast Mean: {voice_features['spectral_contrast_mean']}
-    #- Spectral Rolloff Mean: {voice_features['spectral_rolloff_mean']}
     #- Jitter: {voice_features['jitter']}
     #- Shimmer: {voice_features['shimmer']}
     #- Harmonics-to-Noise Ratio: {voice_features['hnr']}
