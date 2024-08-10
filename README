@@ -25,3 +25,6 @@
 7) pip install gtts
 
 8) pip install SpeechRecognition
+
+9) Running service in background
+	nohup python3 -u perspectiveconnect.py &

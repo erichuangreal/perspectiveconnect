@@ -12,6 +12,9 @@ import matplotlib.pyplot as plt
 import parselmouth
 
 # Define the input messages for the AI chat model
+# Input messages should be improved on. Currently, the AI response feedback is not specific or actionable enough.
+# The input messages should be more detailed and specific to the presentation except chatgpt-3.5 keeps on giving
+# broad, generic, and short responses. May we should consider fine-tuning.
 input_messages = [{"role": "system", "content": """Please give me specific and actionable feedback for my
                    presentation. I want areas to improve in both technical and delivery aspects. Can you also
                    give me specific examples to improve in. You should take quotes from the presentation and
@@ -42,10 +45,17 @@ def transcribe_audio(audio_path, retries=5, delay=2):
     for attempt in range(retries):
         if audio_path is not None and os.path.exists(audio_path):
             try:
-                with sr.AudioFile(audio_path) as source:
-                    audio_data = recognizer.record(source)
-                transcription = recognizer.recognize_google(audio_data)
+                audio_file = open(audio_path, "rb")
+                transcription = client.audio.transcriptions.create(
+                    model="whisper-1", 
+                    file=audio_file, 
+                    response_format="text"
+                )
                 return transcription
+                #with sr.AudioFile(audio_path) as source:
+                #    audio_data = recognizer.record(source)
+                #transcription = recognizer.recognize_google(audio_data)
+                #return transcription
             except sr.UnknownValueError:
                 print("Audio not clear enough to transcribe.")
                 return ""
@@ -194,4 +204,4 @@ ui = gr.Interface(fn=process_presentation,
                 description="Practice your presentation to get transcription, feedback, and audio feedback."
             )
 #ui.launch(auth=(server_name="0.0.0.0", server_port=7860, "test", "eric123321!"), share=True)
-ui.launch(share=True, server_name="0.0.0.0", server_port=7860)
+ui.launch(share=True, server_name="0.0.0.0", server_port=7861)
