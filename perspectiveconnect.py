@@ -139,18 +139,16 @@ def extracting_audio_qualities(audio) :
 
     # Jitter, Shimmer, HNR (Sometimes the parselmouth.praat.call method throws an error because the snd object
     # is not compatible with the function, help fix this issue)
-    """ snd = parselmouth.Sound(audio)
+    snd = parselmouth.Sound(audio)
     print(f"Audio duration: {snd.get_total_duration()} seconds")
     print(f"Sampling frequency: {snd.get_sampling_frequency()} Hz")
     
-    try:
-        point_process = parselmouth.praat.call(snd, "To PointProcess (periodic, cc)")
-        jitter = parselmouth.praat.call(point_process, "Get jitter (local)", 0, 0, 0.0001, 0.02, 1.3)
-        shimmer = parselmouth.praat.call([snd, point_process], "Get shimmer (local)", 0, 0, 0.0001, 0.02, 1.3)
-        hnr = parselmouth.praat.call(snd, "To Harmonicity (cc)", 0.01, 75, 0.1, 1.0).mean()
-    except parselmouth.PraatError as e:
-        print(f"Error processing audio qualities: {e}")
-        jitter = shimmer = hnr = None"""
+    point_process = parselmouth.praat.call(snd, "To PointProcess (periodic, cc)", 100, 1000)
+    jitter = parselmouth.praat.call(point_process, "Get jitter (local)", 0, 0, 0.0001, 0.02, 1.3)
+    shimmer = parselmouth.praat.call([snd, point_process], "Get shimmer (local)", 0, 0, 0.0001, 0.02, 1.3, 1.6)
+    harmonicity = parselmouth.praat.call(snd, "To Harmonicity (cc)", 0.01, 75, 0.1, 1.0)
+    hnr = parselmouth.praat.call(harmonicity, "Get mean", 0, 0)
+
 
     # Results
     results = {
@@ -165,9 +163,10 @@ def extracting_audio_qualities(audio) :
         "spectral_flatness_mean": spectral_flatness,
         "spectral_contrast_mean": spectral_contrast.tolist(),
         "spectral_rolloff_mean": spectral_rolloff,
-        #"jitter": jitter,
-        #"shimmer": shimmer,
-        #"hnr": hnr
+        "jitter": jitter,
+        "shimmer": shimmer,
+        "hnr": hnr,
+        "harmonicity": harmonicity
     }
     
     return results
@@ -189,13 +188,12 @@ def prepare_prompt(transcription, voice_features):
     - Spectral Flatness Mean: {voice_features['spectral_flatness_mean']}
     - Spectral Contrast Mean: {voice_features['spectral_contrast_mean']}
     - Spectral Rolloff Mean: {voice_features['spectral_rolloff_mean']}
+    - Jitter: {voice_features['jitter']}
+    - Shimmer: {voice_features['shimmer']}
+    - Harmonics-to-Noise Ratio: {voice_features['hnr']}
+
+    Please evaluate the presentation based on the provided text and voice features.
     """
-    #- Jitter: {voice_features['jitter']}
-    #- Shimmer: {voice_features['shimmer']}
-    #- Harmonics-to-Noise Ratio: {voice_features['hnr']}
-
-    #Please evaluate the presentation based on the provided text and voice features.
-
     return prompt
 
 ui = gr.Interface(fn=process_presentation, 
