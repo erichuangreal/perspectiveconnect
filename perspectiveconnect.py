@@ -15,10 +15,13 @@ import parselmouth
 # Input messages should be improved on. Currently, the AI response feedback is not specific or actionable enough.
 # The input messages should be more detailed and specific to the presentation except chatgpt-3.5 keeps on giving
 # broad, generic, and short responses. May we should consider fine-tuning.
-input_messages = [{"role": "system", "content": """Please give me specific and actionable feedback for my
-                   presentation. I want areas to improve in both technical and delivery aspects. Can you also
-                   give me specific examples to improve in. You should take quotes from the presentation and
-                   analyze their faults.
+input_messages = [{"role": "system", "content": """Please analyze the technical and devliery aspects of my
+                   presentation and provide helpful feedback. I want examples from the text that I must improve in.
+                   I want to know how I can improve my delivery and content. Never use # and * symbols. No italics,
+                   bold, underlined, or any other font styles or emphasis text. Please provide as much detail and
+                   examples as possible. I do not want generic feedback. I want specific feedback that I can use to.
+                   A one sentence imrpovement is not enough. I want a detailed analysis of my presentation. Please the
+                   feedback relevant and specific, thank you.
                    """}]
 
 
@@ -70,14 +73,16 @@ def get_feedback(transcription):
     input_messages.append({"role": "user", "content": transcription})
 
     stream = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4o",
         messages=input_messages,
         stream=True,
     )
     response = ""
     for chunk in stream:
         if chunk.choices[0].delta.content is not None:
-            response += " " + chunk.choices[0].delta.content
+            response += chunk.choices[0].delta.content
+    response = response.replace("*", "")
+    response = response.replace("#", "")
     return response
 
 def text_to_speech(response):
