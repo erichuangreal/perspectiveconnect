@@ -204,7 +204,7 @@ ui = gr.Interface(fn=process_presentation,
                     gr.Audio(label="Audio Ai Response", type="filepath")
                 ],
                 title="AI Presentation Trainer",
-                description="Practice your presentation to get transcription, feedback, and audio feedback."
+                description="<html><body><p>Practice your presentation to get transcription, feedback, and audio feedback. <br>Step1: start recording; <br>Step2: stop recording; <br>Step3: play back your recording; <br>Step4: submit your recording; <br>Step5: get feedback.</p></body></html>"
             )
 #ui.launch(auth=(server_name="0.0.0.0", server_port=7860, "test", "eric123321!"), share=True)
 ui.launch(share=True, server_name="0.0.0.0", server_port=7861)
