@@ -13,6 +13,7 @@ export default function Practice() {
   const [blob, setBlob] = useState<Blob | null>(null);
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState("");
 
   const [goal, setGoal] = useState("inform");
   const [audience, setAudience] = useState("classmates or interviewers");
@@ -27,6 +28,8 @@ export default function Practice() {
     if (!blob) return;
     setErr("");
     setLoading(true);
+    setProgress("Uploading audio...");
+
     try {
       const form = new FormData();
       form.append("audio_file", blob, "recording.webm");
@@ -35,16 +38,39 @@ export default function Practice() {
       form.append("time_limit_seconds", String(timeLimit));
       form.append("rubric", rubric);
 
+      // Simulate progress updates based on typical processing times
+      const t1 = setTimeout(() => setProgress("Converting audio format..."), 1000);
+      const t2 = setTimeout(() => setProgress("Transcribing speech with AI..."), 3000);
+      const t3 = setTimeout(() => setProgress("Analyzing voice features..."), 8000);
+      const t4 = setTimeout(() => setProgress("Generating coaching feedback..."), 15000);
+
       const data = await apiFetch("/training/submit", {
         method: "POST",
         body: form,
       });
-      router.push(`/sessions/${data.session_id}`);
+      
+      // Clear any pending timeouts
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearTimeout(t4);
+      
+      setProgress("Complete! Redirecting...");
+      setTimeout(() => {
+        router.push(`/sessions/${data.session_id}`);
+      }, 500);
     } catch (e: any) {
       setErr(e.message);
+      setProgress("");
     } finally {
       setLoading(false);
     }
+  }
+
+  function handleClear() {
+    setBlob(null);
+    setProgress("");
+    setErr("");
   }
 
   return (
@@ -93,16 +119,34 @@ export default function Practice() {
               </div>
             ) : null}
 
+            {loading && progress ? (
+              <div className="rounded-2xl border border-brand-200 bg-brand-50 p-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex gap-1">
+                    <span className="h-2 w-2 animate-pulse rounded-full bg-brand-600" />
+                    <span className="h-2 w-2 animate-pulse rounded-full bg-brand-600 [animation-delay:150ms]" />
+                    <span className="h-2 w-2 animate-pulse rounded-full bg-brand-600 [animation-delay:300ms]" />
+                  </div>
+                  <div className="text-sm font-medium text-brand-900">
+                    {progress}
+                  </div>
+                </div>
+                <div className="mt-2 text-xs text-brand-700">
+                  This typically takes 30-60 seconds. Please wait...
+                </div>
+              </div>
+            ) : null}
+
             <div className="flex items-center justify-end gap-3">
               <Button
                 variant="secondary"
                 disabled={!blob || loading}
-                onClick={() => setBlob(null)}
+                onClick={handleClear}
               >
                 Clear
               </Button>
               <Button disabled={!blob || loading} onClick={submit}>
-                {loading ? "Submitting..." : "Submit for feedback"}
+                {loading ? "Processing..." : "Submit for feedback"}
               </Button>
             </div>
           </CardContent>
