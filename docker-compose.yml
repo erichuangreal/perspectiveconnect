@@ -1,0 +1,48 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: pc_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: perspectiveconnect
+    ports:
+      - "3306:3306"
+    volumes:
+      - pc_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-prootpass"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    build: ./backend
+    container_name: pc_backend
+    env_file:
+      - ./backend/.env.example
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: rootpass
+      DB_NAME: perspectiveconnect
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/app/storage:/app/app/storage
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    container_name: pc_frontend
+    environment:
+      NEXT_PUBLIC_API_BASE: http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  pc_mysql_data:

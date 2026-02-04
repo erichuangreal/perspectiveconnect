@@ -28,3 +28,9 @@
 
 9) Running service in background
 	nohup python3 -u perspectiveconnect.py &
+
+
+Backend
+1) database
+docker compose up --build
+
