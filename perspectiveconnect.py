@@ -25,7 +25,7 @@ input_messages = [{"role": "system", "content": """Please analyze the technical 
                    """}]
 
 
-client = OpenAI(api_key='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')
+client = OpenAI(api_key='placeholder')
 
 def generate_ai_response_file_path(length=10):
     # Get the current timestamp
