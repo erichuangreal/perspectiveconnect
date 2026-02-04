@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { clearToken, getToken } from "@/lib/auth";
 import { usePathname, useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
+import { apiFetch } from "@/lib/api";
 
 function NavLink({ href, label }: { href: string; label: string }) {
   const pathname = usePathname();
@@ -26,11 +27,22 @@ function NavLink({ href, label }: { href: string; label: string }) {
 
 export default function Nav() {
   const [authed, setAuthed] = useState(false);
+  const [username, setUsername] = useState("");
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
-    setAuthed(!!getToken());
-  }, []);
+    const token = getToken();
+    setAuthed(!!token);
+    
+    if (token) {
+      apiFetch("/auth/me")
+        .then((data) => setUsername(data.username))
+        .catch(() => setUsername(""));
+    } else {
+      setUsername("");
+    }
+  }, [pathname]);
 
   function logout() {
     clearToken();
@@ -53,15 +65,30 @@ export default function Nav() {
           </div>
         </Link>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {authed ? (
-            <>
-              <NavLink href="/dashboard" label="Dashboard" />
-              <NavLink href="/practice" label="Practice" />
-              <Button variant="secondary" onClick={logout}>
-                Logout
-              </Button>
-            </>
+            <div className="flex flex-col items-end gap-1">
+              <div className="flex items-center gap-2">
+                <Link href="/dashboard">
+                  <Button variant={pathname === "/dashboard" ? "primary" : "secondary"}>
+                    Dashboard
+                  </Button>
+                </Link>
+                <Link href="/practice">
+                  <Button variant={pathname === "/practice" ? "primary" : "secondary"}>
+                    Practice
+                  </Button>
+                </Link>
+                <Button variant="secondary" onClick={logout}>
+                  Logout
+                </Button>
+              </div>
+              {username && (
+                <div className="text-xs font-medium text-slate-600">
+                  {username}
+                </div>
+              )}
+            </div>
           ) : (
             <>
               <NavLink href="/login" label="Login" />
