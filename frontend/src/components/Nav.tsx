@@ -75,7 +75,7 @@ export default function Nav() {
                   </Button>
                 </Link>
                 <Link href="/practice">
-                  <Button variant={pathname === "/practice" ? "primary" : "secondary"}>
+                  <Button variant={pathname === "/practice" || pathname.startsWith("/sessions") ? "primary" : "secondary"}>
                     Practice
                   </Button>
                 </Link>
