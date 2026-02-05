@@ -30,6 +30,7 @@ env/
 .env/
 .venv/
 backend/venv/
+.github/
 
 # Installer logs
 pip-log.txt
