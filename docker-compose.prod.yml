@@ -2,6 +2,8 @@ services:
   mysql:
     image: mysql:8.0
     container_name: pc_mysql
+    env_file:
+      - ./backend/.env
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-rootpass}
       MYSQL_DATABASE: perspectiveconnect
