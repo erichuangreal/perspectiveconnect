@@ -24,6 +24,9 @@ share/python-wheels/
 *.egg-info/
 *.egg
 
+# But allow frontend lib directory
+!frontend/src/lib/
+
 # Virtual environments
 venv/
 env/
