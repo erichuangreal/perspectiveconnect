@@ -140,15 +140,16 @@ See [VERSIONING.md](./VERSIONING.md) for complete versioning documentation.
 
 ### Simple Deployment
 
-For basic deployment without versioning:
+Quick deployment command:
 
 ```bash
-# Configure environment
+# Configure environment (first time only)
 cp .env.production.example backend/.env
 nano backend/.env  # Add your production values
 
-# Deploy with Docker
+# Deploy (uses versioned deployment)
 ./deploy.sh
+# Note: deploy.sh is a shortcut to deploy-versioned.sh
 ```
 
 ### Full Deployment Guide
@@ -234,7 +235,9 @@ perspectiveconnect/
 │   └── tailwind.config.ts
 ├── docker-compose.yml           # Development compose
 ├── docker-compose.prod.yml      # Production compose
-├── deploy.sh                    # Deployment script
+├── deploy-versioned.sh          # Versioned deployment script
+├── deploy.sh                    # → Symlink to deploy-versioned.sh
+├── rollback.sh                  # Rollback script
 ├── nginx.conf.example           # Nginx configuration
 ├── DEPLOYMENT.md                # Deployment guide
 ├── QUICKSTART.md                # Quick start guide

@@ -32,7 +32,7 @@ nano backend/.env
 # Add your OPENAI_API_KEY and change passwords
 
 # 4. Deploy
-./deploy.sh
+./deploy-versioned.sh
 
 # 5. Install and configure Nginx
 sudo apt install -y nginx
@@ -83,7 +83,8 @@ docker-compose -f docker-compose.prod.yml restart
 
 ```bash
 cd /opt/perspectiveconnect
-./deploy.sh
+git pull
+./deploy-versioned.sh
 ```
 
 ### 🆘 Troubleshooting
