@@ -3,6 +3,7 @@ set -e
 
 # PerspectiveConnect Rollback Script
 
+DEPLOY_DIR="/opt/perspectiveconnect"
 VERSIONS_DIR="/opt/perspectiveconnect-versions"
 
 # Colors
@@ -11,6 +12,9 @@ BLUE='\033[0;34m'
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
+
+# Ensure we're in the deployment directory
+cd "${DEPLOY_DIR}"
 
 echo -e "${RED}⏪ PerspectiveConnect Rollback${NC}"
 echo ""
@@ -79,6 +83,7 @@ if [ -z "$1" ]; then
 fi
 
 echo -e "${YELLOW}🔄 Step 1: Stopping current services...${NC}"
+cd "${DEPLOY_DIR}"
 docker-compose -f docker-compose.prod.yml down
 
 echo -e "${YELLOW}🔄 Step 2: Loading previous Docker images...${NC}"
@@ -95,6 +100,7 @@ if [ -f "${VERSIONS_DIR}/${ROLLBACK_VERSION}/frontend-image.tar.gz" ]; then
 fi
 
 echo -e "${YELLOW}🔄 Step 3: Starting services...${NC}"
+cd "${DEPLOY_DIR}"
 docker-compose -f docker-compose.prod.yml up -d
 
 echo -e "${YELLOW}⏳ Waiting for services...${NC}"
