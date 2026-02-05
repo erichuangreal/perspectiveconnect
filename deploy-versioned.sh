@@ -34,7 +34,11 @@ if [ ! -f "backend/.env" ]; then
 fi
 
 # Create versions directory if it doesn't exist
-mkdir -p "${VERSIONS_DIR}"
+if [ ! -d "${VERSIONS_DIR}" ]; then
+    echo "Creating versions directory..."
+    sudo mkdir -p "${VERSIONS_DIR}"
+    sudo chown $USER:$USER "${VERSIONS_DIR}"
+fi
 
 echo -e "${YELLOW}📦 Step 1: Creating version backup...${NC}"
 
@@ -42,15 +46,28 @@ echo -e "${YELLOW}📦 Step 1: Creating version backup...${NC}"
 VERSION_PATH="${VERSIONS_DIR}/v${VERSION}"
 mkdir -p "${VERSION_PATH}"
 
-# Copy current deployment to version backup
-if [ -d "${DEPLOY_DIR}" ]; then
+# Copy current deployment to version backup (skip on first deployment)
+if [ -d "${DEPLOY_DIR}" ] && [ "$(docker images -q pc_backend:latest 2>/dev/null)" ]; then
     echo "Backing up current deployment..."
-    cp -r "${DEPLOY_DIR}" "${VERSION_PATH}/backup"
+    cp -r "${DEPLOY_DIR}" "${VERSION_PATH}/backup" 2>/dev/null || echo "Skipping code backup"
     
-    # Save current Docker images
+    # Save current Docker images (only if they exist)
     echo "Saving current Docker images..."
-    docker save pc_backend:latest | gzip > "${VERSION_PATH}/backend-image.tar.gz" 2>/dev/null || echo "No backend image found"
-    docker save pc_frontend:latest | gzip > "${VERSION_PATH}/frontend-image.tar.gz" 2>/dev/null || echo "No frontend image found"
+    if docker image inspect pc_backend:latest >/dev/null 2>&1; then
+        docker save pc_backend:latest | gzip > "${VERSION_PATH}/backend-image.tar.gz"
+        echo "  Backend image saved"
+    else
+        echo "  No backend image to backup (first deployment)"
+    fi
+    
+    if docker image inspect pc_frontend:latest >/dev/null 2>&1; then
+        docker save pc_frontend:latest | gzip > "${VERSION_PATH}/frontend-image.tar.gz"
+        echo "  Frontend image saved"
+    else
+        echo "  No frontend image to backup (first deployment)"
+    fi
+else
+    echo "First deployment - no previous version to backup"
 fi
 
 echo -e "${GREEN}✅ Backup created at ${VERSION_PATH}${NC}"
@@ -88,11 +105,37 @@ docker-compose -f docker-compose.prod.yml up -d
 
 echo ""
 echo -e "${YELLOW}⏳ Step 5: Waiting for services to be ready...${NC}"
-sleep 10
 
-# Health check
-BACKEND_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/docs || echo "000")
-FRONTEND_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000 || echo "000")
+# Wait for containers to be healthy
+echo "Checking MySQL..."
+for i in {1..30}; do
+    if docker-compose -f docker-compose.prod.yml ps mysql | grep -q "healthy"; then
+        echo "MySQL is ready"
+        break
+    fi
+    echo "Waiting for MySQL... ($i/30)"
+    sleep 2
+done
+
+echo "Waiting for backend and frontend to start..."
+sleep 15
+
+# Health check with retries
+echo "Performing health checks..."
+BACKEND_HEALTH="000"
+FRONTEND_HEALTH="000"
+
+for i in {1..10}; do
+    BACKEND_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/docs 2>/dev/null || echo "000")
+    FRONTEND_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000 2>/dev/null || echo "000")
+    
+    if [ "$BACKEND_HEALTH" == "200" ] && [ "$FRONTEND_HEALTH" == "200" ]; then
+        break
+    fi
+    
+    echo "  Attempt $i/10 - Backend: ${BACKEND_HEALTH}, Frontend: ${FRONTEND_HEALTH}"
+    sleep 3
+done
 
 if [ "$BACKEND_HEALTH" == "200" ] && [ "$FRONTEND_HEALTH" == "200" ]; then
     echo -e "${GREEN}✅ Health check passed${NC}"
@@ -113,6 +156,15 @@ EOF
 else
     echo -e "${RED}❌ Health check failed!${NC}"
     echo "Backend: ${BACKEND_HEALTH}, Frontend: ${FRONTEND_HEALTH}"
+    echo ""
+    
+    # Show recent logs to help debug
+    echo -e "${YELLOW}Recent backend logs:${NC}"
+    docker-compose -f docker-compose.prod.yml logs --tail=20 backend
+    echo ""
+    echo -e "${YELLOW}Recent frontend logs:${NC}"
+    docker-compose -f docker-compose.prod.yml logs --tail=20 frontend
+    echo ""
     
     # Save failure info
     cat > "${VERSION_PATH}/deployment-info.txt" <<EOF
@@ -124,8 +176,11 @@ Frontend Health: ${FRONTEND_HEALTH}
 Status: FAILED
 EOF
     
-    echo -e "${YELLOW}Rolling back to previous version...${NC}"
-    ./rollback.sh
+    echo -e "${RED}Deployment failed. Services are still running for debugging.${NC}"
+    echo -e "${YELLOW}Run './debug-deployment.sh' for detailed diagnostics${NC}"
+    echo -e "${YELLOW}Or check logs: docker-compose -f docker-compose.prod.yml logs -f${NC}"
+    echo ""
+    echo "After fixing issues, run './deploy-versioned.sh' again"
     exit 1
 fi
 

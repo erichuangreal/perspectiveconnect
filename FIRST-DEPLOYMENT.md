@@ -147,14 +147,22 @@ openssl rand -base64 32
 
 ---
 
-### Step 6: Run First Deployment
+### Step 6: Prepare Deployment Directories
 
 ```bash
 cd /opt/perspectiveconnect
 
-# Make deployment script executable
-chmod +x deploy-versioned.sh
+# Create versions directory for backups
+sudo mkdir -p /opt/perspectiveconnect-versions
+sudo chown $USER:$USER /opt/perspectiveconnect-versions
 
+# Make all deployment scripts executable
+chmod +x deploy-versioned.sh rollback.sh list-versions.sh cleanup-versions.sh
+```
+
+### Step 7: Run First Deployment
+
+```bash
 # Run first deployment
 ./deploy-versioned.sh
 ```
@@ -199,7 +207,7 @@ Frontend: http://localhost:3000
 
 ---
 
-### Step 7: Verify Services Are Running
+### Step 8: Verify Services Are Running
 
 ```bash
 # Check service status
@@ -228,7 +236,7 @@ curl http://localhost:3000
 
 ---
 
-### Step 8: Install and Configure Nginx
+### Step 9: Install and Configure Nginx
 
 Nginx will act as a reverse proxy, handling external traffic and SSL.
 
@@ -316,7 +324,7 @@ To                         Action      From
 
 ---
 
-### Step 10: Setup SSL/HTTPS (Highly Recommended)
+### Step 11: Setup SSL/HTTPS (Highly Recommended)
 
 **Skip this step if you don't have a domain name yet.**
 
@@ -371,7 +379,7 @@ http://your-server-ip
 
 ---
 
-### Step 12: Create Your First Account
+### Step 13: Create Your First Account
 
 1. **Click "Register"**
 2. **Fill in:**
@@ -383,7 +391,7 @@ http://your-server-ip
 
 ---
 
-### Step 13: Test Practice Feature
+### Step 14: Test Practice Feature
 
 1. **Click "Practice" button**
 2. **Click "Start recording"**
