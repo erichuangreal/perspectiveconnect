@@ -97,8 +97,8 @@ Nginx reverse proxy configuration template
 
 | Script | Purpose |
 |--------|---------|
-| `deploy-versioned.sh` | Deploy new version with backup |
-| `deploy.sh` | Simple deployment (no versioning) |
+| `deploy-versioned.sh` | Deploy new version with backup (main script) |
+| `deploy.sh` | Symlink to deploy-versioned.sh |
 | `rollback.sh` | Rollback to previous version |
 | `list-versions.sh` | Show deployment history |
 | `cleanup-versions.sh` | Clean up old version backups |
@@ -216,7 +216,7 @@ perspectiveconnect/
 │
 ├── 🚀 DEPLOYMENT SCRIPTS
 │   ├── deploy-versioned.sh            # ⭐ Main deployment script
-│   ├── deploy.sh                      # Simple deployment
+│   ├── deploy.sh                      # → Symlink to deploy-versioned.sh
 │   ├── rollback.sh                    # Rollback to previous version
 │   ├── list-versions.sh               # Show deployment history
 │   └── cleanup-versions.sh            # Clean old versions
