@@ -27,7 +27,7 @@ services:
       DB_HOST: mysql
       DB_PORT: 3306
     ports:
-      - "127.0.0.1:8000:8000"
+      - "0.0.0.0:8000:8000"
     volumes:
       - ./backend/app/storage:/app/app/storage
     depends_on:
@@ -40,11 +40,11 @@ services:
     build:
       context: ./frontend
       args:
-        NEXT_PUBLIC_API_BASE: ${NEXT_PUBLIC_API_BASE:-http://localhost:8000}
+        NEXT_PUBLIC_API_BASE: ${NEXT_PUBLIC_API_BASE:-http://159.89.112.149:8000}
     image: pc_frontend:latest
     container_name: pc_frontend
     ports:
-      - "127.0.0.1:3000:3000"
+      - "0.0.0.0:3000:3000"
     depends_on:
       - backend
     restart: always
