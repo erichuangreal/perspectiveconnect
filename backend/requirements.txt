@@ -11,7 +11,7 @@ pyjwt==2.10.1
 pydantic[email]>=2.0.0
 email-validator>=2.0.0
 
-openai==1.54.4
+openai>=1.54.4
 librosa==0.10.2.post1
 numpy==2.0.2
 soundfile==0.12.1
