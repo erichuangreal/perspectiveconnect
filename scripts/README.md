@@ -11,8 +11,6 @@ This directory contains all deployment and utility scripts for PerspectiveConnec
 
 ### Utilities
 - **`check-status.sh`** - Quick health check for all services
-- **`debug-deployment.sh`** - Detailed deployment diagnostics
-- **`fix-deployment.sh`** - Display logs and restart services
 - **`cleanup-versions.sh`** - Clean up old deployment versions
 
 ## Usage
@@ -30,6 +28,27 @@ Or use the convenience symlink in the project root:
 
 ```bash
 ./deploy.sh  # Points to scripts/deploy-versioned.sh
+```
+
+## Troubleshooting
+
+If you need to debug deployment issues, use these commands:
+
+```bash
+# Check container status
+docker ps
+
+# View backend logs
+docker logs pc_backend --tail 50
+
+# View frontend logs
+docker logs pc_frontend --tail 50
+
+# Restart a service
+docker-compose -f docker-compose.prod.yml restart backend
+
+# Full health check
+./scripts/check-status.sh
 ```
 
 ## Documentation

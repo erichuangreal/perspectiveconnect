@@ -240,8 +240,6 @@ perspectiveconnect/
 │   ├── rollback.sh             # Rollback to previous version
 │   ├── list-versions.sh        # List deployment history
 │   ├── check-status.sh         # Health check
-│   ├── debug-deployment.sh     # Diagnostics
-│   ├── fix-deployment.sh       # Fix and restart
 │   └── cleanup-versions.sh     # Clean old versions
 ├── docs/                        # Documentation
 │   ├── DEPLOYMENT.md           # Full deployment guide
