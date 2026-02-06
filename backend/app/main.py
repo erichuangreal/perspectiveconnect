@@ -29,6 +29,8 @@ app.add_middleware(
         "http://localhost:3000",
         "http://159.89.112.149:3000",
         "https://159.89.112.149:3000",
+        "https://pc.appfounder.ca",
+        "http://pc.appfounder.ca",
     ],
     allow_credentials=True,
     allow_methods=["*"],
