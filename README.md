@@ -112,11 +112,11 @@ npm run dev
 ### 🆕 First Time Deployment
 
 **Never deployed before?** Start here:  
-👉 **[FIRST-DEPLOYMENT.md](./FIRST-DEPLOYMENT.md)** - Complete step-by-step guide (30-45 min)
+👉 **[FIRST-DEPLOYMENT.md](./docs/FIRST-DEPLOYMENT.md)** - Complete step-by-step guide (30-45 min)
 
 ### Quick Production Setup (5 minutes)
 
-Already have a server ready? See [QUICKSTART.md](./QUICKSTART.md) for rapid deployment.
+Already have a server ready? See [QUICKSTART.md](./docs/QUICKSTART.md) for rapid deployment.
 
 ### Versioned Deployments (Recommended)
 
@@ -130,13 +130,13 @@ Deploy with automatic versioning and rollback capability:
 ./deploy-versioned.sh
 
 # Rollback if needed
-./rollback.sh
+./scripts/rollback.sh
 
 # View deployment history
 ./list-versions.sh
 ```
 
-See [VERSIONING.md](./VERSIONING.md) for complete versioning documentation.
+See [VERSIONING.md](./docs/VERSIONING.md) for complete versioning documentation.
 
 ### Simple Deployment
 
@@ -154,7 +154,7 @@ nano backend/.env  # Add your production values
 
 ### Full Deployment Guide
 
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for comprehensive deployment documentation including:
+See [DEPLOYMENT.md](./docs/DEPLOYMENT.md) for comprehensive deployment documentation including:
 - Docker deployment
 - Manual deployment with systemd
 - Nginx configuration
@@ -235,12 +235,24 @@ perspectiveconnect/
 │   └── tailwind.config.ts
 ├── docker-compose.yml           # Development compose
 ├── docker-compose.prod.yml      # Production compose
-├── deploy-versioned.sh          # Versioned deployment script
-├── deploy.sh                    # → Symlink to deploy-versioned.sh
-├── rollback.sh                  # Rollback script
-├── nginx.conf.example           # Nginx configuration
-├── DEPLOYMENT.md                # Deployment guide
-├── QUICKSTART.md                # Quick start guide
+├── scripts/                     # Deployment scripts
+│   ├── deploy-versioned.sh     # Main deployment script
+│   ├── rollback.sh             # Rollback to previous version
+│   ├── list-versions.sh        # List deployment history
+│   ├── check-status.sh         # Health check
+│   ├── debug-deployment.sh     # Diagnostics
+│   ├── fix-deployment.sh       # Fix and restart
+│   └── cleanup-versions.sh     # Clean old versions
+├── docs/                        # Documentation
+│   ├── DEPLOYMENT.md           # Full deployment guide
+│   ├── QUICKSTART.md           # Quick start guide
+│   ├── FIRST-DEPLOYMENT.md     # Step-by-step first deployment
+│   ├── VERSIONING.md           # Versioning and rollback guide
+│   └── ...                     # Other documentation
+├── config/                      # Configuration examples
+│   ├── .env.production.example # Environment template
+│   └── nginx.conf.example      # Nginx configuration
+├── deploy.sh                    # → Symlink to scripts/deploy-versioned.sh
 └── README.md                    # This file
 ```
 
@@ -387,7 +399,7 @@ sudo netstat -tulpn | grep 8000
 
 ### Get Help
 
-- Check [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed guides
+- Check [DEPLOYMENT.md](./docs/DEPLOYMENT.md) for detailed guides
 - Review logs for error messages
 - Verify all environment variables are set
 - Ensure all dependencies are installed

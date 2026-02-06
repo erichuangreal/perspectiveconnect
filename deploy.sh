@@ -1,1 +1,1 @@
-deploy-versioned.sh
+scripts/deploy-versioned.sh
