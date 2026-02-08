@@ -44,6 +44,15 @@ sudo ufw delete allow 8000/tcp
 # Check firewall status
 sudo ufw status
 ```
+if firewall status is inactive
+# Ensure SSH is allowed (IMPORTANT!)
+sudo ufw allow 22/tcp
+
+# Enable the firewall
+sudo ufw enable
+
+# Check status again
+sudo ufw status
 
 ---
 
