@@ -27,7 +27,7 @@ services:
       DB_PASSWORD: rootpass
       DB_NAME: perspectiveconnect
     ports:
-      - "8000:8000"
+      - "9000:9000"
     volumes:
       - ./backend/app/storage:/app/app/storage
     depends_on:
@@ -38,9 +38,9 @@ services:
     build: ./frontend
     container_name: pc_frontend
     environment:
-      NEXT_PUBLIC_API_BASE: http://localhost:8000
+      NEXT_PUBLIC_API_BASE: http://localhost:9000
     ports:
-      - "3000:3000"
+      - "4000:4000"
     depends_on:
       - backend
 

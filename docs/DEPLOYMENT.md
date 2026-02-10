@@ -97,7 +97,7 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: perspectiveconnect
     ports:
-      - "127.0.0.1:8000:8000"  # Only localhost access
+      - "127.0.0.1:9000:9000"  # Only localhost access
     volumes:
       - ./backend/app/storage:/app/app/storage
     depends_on:
@@ -111,7 +111,7 @@ services:
     environment:
       NEXT_PUBLIC_API_BASE: https://yourdomain.com/api
     ports:
-      - "127.0.0.1:3000:3000"  # Only localhost access
+      - "127.0.0.1:4000:4000"  # Only localhost access
     depends_on:
       - backend
     restart: always
@@ -200,7 +200,7 @@ nano .env  # Edit with production values
 mkdir -p app/storage
 
 # Test backend
-uvicorn app.main:app --host 0.0.0.0 --port 8000
+uvicorn app.main:app --host 0.0.0.0 --port 9000
 # Press Ctrl+C to stop
 ```
 
@@ -221,7 +221,7 @@ Type=simple
 User=www-data
 WorkingDirectory=/opt/perspectiveconnect/backend
 Environment="PATH=/opt/perspectiveconnect/backend/venv/bin"
-ExecStart=/opt/perspectiveconnect/backend/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000 --workers 4
+ExecStart=/opt/perspectiveconnect/backend/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 9000 --workers 4
 Restart=always
 RestartSec=3
 
@@ -301,12 +301,12 @@ sudo nano /etc/nginx/sites-available/perspectiveconnect
 ```nginx
 # Backend API
 upstream backend {
-    server 127.0.0.1:8000;
+    server 127.0.0.1:9000;
 }
 
 # Frontend
 upstream frontend {
-    server 127.0.0.1:3000;
+    server 127.0.0.1:4000;
 }
 
 server {
@@ -533,7 +533,7 @@ proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=my_cache:10m max_size=1g 
 
 Adjust workers in systemd service:
 ```ini
-ExecStart=/opt/perspectiveconnect/backend/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000 --workers 4
+ExecStart=/opt/perspectiveconnect/backend/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 9000 --workers 4
 ```
 
 ### 3. MySQL Optimization
@@ -556,12 +556,12 @@ max_connections = 200
 sudo journalctl -u perspectiveconnect-backend -n 50
 
 # Check if port is in use
-sudo netstat -tulpn | grep 8000
+sudo netstat -tulpn | grep 9000
 
 # Test manually
 cd /opt/perspectiveconnect/backend
 source venv/bin/activate
-uvicorn app.main:app --host 127.0.0.1 --port 8000
+uvicorn app.main:app --host 127.0.0.1 --port 9000
 ```
 
 ### Frontend build fails

@@ -90,7 +90,7 @@ nano .env  # Add your OPENAI_API_KEY
 docker compose up -d mysql
 
 # Run backend
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+uvicorn app.main:app --reload --host 0.0.0.0 --port 9000
 ```
 
 **3. Frontend Setup**
@@ -101,9 +101,9 @@ npm run dev
 ```
 
 **4. Access Application**
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8000
-- API Docs: http://localhost:8000/docs
+- Frontend: http://localhost:4000
+- Backend API: http://localhost:9000
+   - API Docs: http://localhost:9000/docs
 
 ---
 
@@ -173,8 +173,8 @@ See [DEPLOYMENT-CHEATSHEET.md](./DEPLOYMENT-CHEATSHEET.md) for common commands.
 ## 📖 API Documentation
 
 Once the backend is running, visit:
-- **Interactive API Docs**: http://localhost:8000/docs
-- **OpenAPI Schema**: http://localhost:8000/openapi.json
+- **Interactive API Docs**: http://localhost:9000/docs
+- **OpenAPI Schema**: http://localhost:9000/openapi.json
 
 ### Key Endpoints
 
@@ -284,7 +284,7 @@ AUDIO_STORAGE_DIR=./app/storage
 ### Frontend Environment Variables
 
 ```env
-NEXT_PUBLIC_API_BASE=http://localhost:8000
+NEXT_PUBLIC_API_BASE=http://localhost:9000
 ```
 
 ---
@@ -294,18 +294,18 @@ NEXT_PUBLIC_API_BASE=http://localhost:8000
 ### Test Registration & Login
 ```bash
 # Register
-curl -X POST http://localhost:8000/auth/register \
+curl -X POST http://localhost:9000/auth/register \
   -H "Content-Type: application/json" \
   -d '{"email":"test@example.com","username":"testuser","password":"testpass123"}'
 
 # Login
-curl -X POST http://localhost:8000/auth/login \
+curl -X POST http://localhost:9000/auth/login \
   -H "Content-Type: application/json" \
   -d '{"identifier":"testuser","password":"testpass123"}'
 ```
 
 ### Test Practice Workflow
-1. Visit http://localhost:3000
+1. Visit http://localhost:4000
 2. Register/login
 3. Go to Practice page
 4. Record a short speech (20-40 seconds)
@@ -391,8 +391,8 @@ sudo apt install ffmpeg
 
 **Port Already in Use:**
 ```bash
-# Check what's using port 8000
-sudo netstat -tulpn | grep 8000
+# Check what's using port 9000
+sudo netstat -tulpn | grep 9000
 ```
 
 ### Get Help

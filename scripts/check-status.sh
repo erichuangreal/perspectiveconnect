@@ -13,11 +13,11 @@ docker-compose -f docker-compose.prod.yml ps
 echo ""
 
 echo "Backend health:"
-curl -s -o /dev/null -w "HTTP Status: %{http_code}\n" http://localhost:8000/docs || echo "Cannot connect to backend"
+curl -s -o /dev/null -w "HTTP Status: %{http_code}\n" http://localhost:9000/docs || echo "Cannot connect to backend"
 echo ""
 
 echo "Frontend health:"
-curl -s -o /dev/null -w "HTTP Status: %{http_code}\n" http://localhost:3000 || echo "Cannot connect to frontend"
+curl -s -o /dev/null -w "HTTP Status: %{http_code}\n" http://localhost:4000 || echo "Cannot connect to frontend"
 echo ""
 
 echo "To view logs:"

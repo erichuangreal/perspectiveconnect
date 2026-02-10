@@ -126,8 +126,8 @@ BACKEND_HEALTH="000"
 FRONTEND_HEALTH="000"
 
 for i in {1..10}; do
-    BACKEND_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/docs 2>/dev/null || echo "000")
-    FRONTEND_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000 2>/dev/null || echo "000")
+    BACKEND_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:9000/docs 2>/dev/null || echo "000")
+    FRONTEND_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:4000 2>/dev/null || echo "000")
     
     if [ "$BACKEND_HEALTH" == "200" ] && [ "$FRONTEND_HEALTH" == "200" ]; then
         break
@@ -199,8 +199,8 @@ echo -e "${GREEN}═════════════════════
 echo ""
 echo -e "${BLUE}Version:${NC} v${VERSION}"
 echo -e "${BLUE}Commit:${NC} ${COMMIT_HASH}"
-echo -e "${BLUE}Backend:${NC} http://localhost:8000"
-echo -e "${BLUE}Frontend:${NC} http://localhost:3000"
+echo -e "${BLUE}Backend:${NC} http://localhost:9000"
+echo -e "${BLUE}Frontend:${NC} http://localhost:4000"
 echo ""
 echo -e "${BLUE}To view logs:${NC}"
 echo "  docker-compose -f docker-compose.prod.yml logs -f"

@@ -19,7 +19,7 @@ nano backend/.env
 # Create root .env with passwords and API URL
 cat > .env << EOF
 DB_PASSWORD=your-strong-password
-NEXT_PUBLIC_API_BASE=http://your-server-ip:8000
+NEXT_PUBLIC_API_BASE=http://your-server-ip:9000
 EOF
 ```
 

@@ -107,7 +107,7 @@ echo -e "${YELLOW}⏳ Waiting for services...${NC}"
 sleep 10
 
 # Health check
-BACKEND_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/docs || echo "000")
+BACKEND_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:9000/docs || echo "000")
 FRONTEND_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000 || echo "000")
 
 echo ""

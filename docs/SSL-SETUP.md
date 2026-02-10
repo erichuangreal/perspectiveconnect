@@ -7,7 +7,7 @@ Step-by-step guide to set up Nginx and Let's Encrypt SSL for PerspectiveConnect.
 ## Prerequisites
 
 ✅ Domain configured: `pc.appfounder.ca` → `159.89.112.149`  
-✅ Application running on ports 3000 and 8000  
+✅ Application running on ports 4000 and 9000  
 ⚠️ Ports 80 and 443 must be open in firewall
 
 ---
@@ -38,8 +38,8 @@ sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
 
 # Remove temporary testing ports (we'll use Nginx now)
-sudo ufw delete allow 3000/tcp
-sudo ufw delete allow 8000/tcp
+sudo ufw delete allow 4000/tcp
+sudo ufw delete allow 9000/tcp
 
 # Check firewall status
 sudo ufw status
@@ -71,19 +71,19 @@ Change these lines:
 ```yaml
 # FROM:
     ports:
-      - "0.0.0.0:8000:8000"
+      - "0.0.0.0:9000:9000"
 
 # TO:
     ports:
-      - "127.0.0.1:8000:8000"
+      - "127.0.0.1:9000:9000"
 
 # AND FROM:
     ports:
-      - "0.0.0.0:3000:3000"
+      - "0.0.0.0:4000:4000"
 
 # TO:
     ports:
-      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:4000:4000"
 ```
 
 Then restart:
@@ -143,6 +143,8 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
+**Note:** Frontend runs on port **4000**, backend on **9000**. If you already had Nginx set up, re-copy the config above and reload so it uses these ports.
+
 ---
 
 ## Step 7: Get SSL Certificate
@@ -200,8 +202,8 @@ sudo journalctl -u nginx -n 50
 ### Can't connect to backend/frontend
 ```bash
 # Check services are running on localhost
-curl http://localhost:8000/
-curl http://localhost:3000/
+curl http://localhost:9000/
+curl http://localhost:4000/
 
 # Check Nginx proxy
 sudo tail -f /var/log/nginx/perspectiveconnect_error.log

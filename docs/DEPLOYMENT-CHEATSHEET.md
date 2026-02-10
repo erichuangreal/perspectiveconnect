@@ -101,7 +101,7 @@ docker-compose -f docker-compose.prod.yml logs backend
 docker-compose -f docker-compose.prod.yml restart backend
 
 # Check health
-curl http://localhost:8000/docs
+curl http://localhost:9000/docs
 ```
 
 ### Frontend Not Loading
@@ -113,7 +113,7 @@ docker-compose -f docker-compose.prod.yml logs frontend
 docker-compose -f docker-compose.prod.yml restart frontend
 
 # Check health
-curl http://localhost:3000
+curl http://localhost:4000
 ```
 
 ### Database Issues
@@ -241,17 +241,17 @@ docker-compose -f docker-compose.prod.yml up -d
 
 ### Quick Health Check
 ```bash
-curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/docs
-curl -s -o /dev/null -w "%{http_code}" http://localhost:3000
+curl -s -o /dev/null -w "%{http_code}" http://localhost:9000/docs
+curl -s -o /dev/null -w "%{http_code}" http://localhost:4000
 ```
 
 ### Full Test
 ```bash
 # Backend API
-curl http://localhost:8000/docs
+curl http://localhost:9000/docs
 
 # Frontend
-curl http://localhost:3000
+curl http://localhost:4000
 
 # Database
 docker-compose -f docker-compose.prod.yml exec mysql mysql -u root -p -e "SHOW DATABASES;"

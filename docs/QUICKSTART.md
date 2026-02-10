@@ -129,7 +129,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
 # Edit .env with your OpenAI API key
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+uvicorn app.main:app --reload --host 0.0.0.0 --port 9000
 
 # Frontend (in another terminal)
 cd frontend
@@ -137,7 +137,7 @@ npm install
 npm run dev
 ```
 
-Visit: `http://localhost:3000`
+Visit: `http://localhost:4000`
 
 ---
 
