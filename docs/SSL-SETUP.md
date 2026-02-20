@@ -7,7 +7,7 @@ Step-by-step guide to set up Nginx and Let's Encrypt SSL for PerspectiveConnect.
 ## Prerequisites
 
 ✅ Domain configured: `pc.appfounder.ca` → `159.89.112.149`  
-✅ Application running on ports 4000 and 9000  
+✅ Application running on ports 6000 and 9000  
 ⚠️ Ports 80 and 443 must be open in firewall
 
 ---
@@ -38,14 +38,14 @@ sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
 
 # Remove temporary testing ports (we'll use Nginx now)
-sudo ufw delete allow 4000/tcp
+sudo ufw delete allow 6000/tcp
 sudo ufw delete allow 9000/tcp
 
 # Check firewall status
 sudo ufw status
 ```
 
-**Why not open 4000 and 9000?** Frontend and backend are bound to `127.0.0.1`, so only Nginx on the same server can reach them. All external traffic goes through Nginx on **80** (HTTP) and **443** (HTTPS). Opening 4000/9000 would be unnecessary and less secure.
+**Why not open 6000 and 9000?** Frontend and backend are bound to `127.0.0.1`, so only Nginx on the same server can reach them. All external traffic goes through Nginx on **80** (HTTP) and **443** (HTTPS). Opening 6000/9000 would be unnecessary and less secure.
 
 **If firewall status is inactive:**
 
@@ -85,11 +85,11 @@ Change these lines:
 
 # AND FROM:
     ports:
-      - "0.0.0.0:4000:4000"
+      - "0.0.0.0:6000:6000"
 
 # TO:
     ports:
-      - "127.0.0.1:4000:4000"
+      - "127.0.0.1:6000:6000"
 ```
 
 Then restart:
@@ -149,7 +149,7 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-**Note:** Frontend runs on port **4000**, backend on **9000**. If you already had Nginx set up, re-copy the config above and reload so it uses these ports.
+**Note:** Frontend runs on port **6000**, backend on **9000**. If you already had Nginx set up, re-copy the config above and reload so it uses these ports.
 
 ---
 
@@ -209,7 +209,7 @@ sudo journalctl -u nginx -n 50
 ```bash
 # Check services are running on localhost
 curl http://localhost:9000/
-curl http://localhost:4000/
+curl http://localhost:6000/
 
 # Check Nginx proxy
 sudo tail -f /var/log/nginx/perspectiveconnect_error.log

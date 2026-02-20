@@ -75,7 +75,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: perspectiveconnect
     ports:
-      - "127.0.0.1:3306:3306"  # Only localhost access
+      - "127.0.0.1:3308:3306"  # Only localhost access
     volumes:
       - pc_mysql_data:/var/lib/mysql
     restart: always
@@ -111,7 +111,7 @@ services:
     environment:
       NEXT_PUBLIC_API_BASE: https://yourdomain.com/api
     ports:
-      - "127.0.0.1:4000:4000"  # Only localhost access
+      - "127.0.0.1:6000:6000"  # Only localhost access
     depends_on:
       - backend
     restart: always
@@ -306,7 +306,7 @@ upstream backend {
 
 # Frontend
 upstream frontend {
-    server 127.0.0.1:4000;
+    server 127.0.0.1:6000;
 }
 
 server {
