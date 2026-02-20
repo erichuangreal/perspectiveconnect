@@ -127,7 +127,7 @@ FRONTEND_HEALTH="000"
 
 for i in {1..10}; do
     BACKEND_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:9000/docs 2>/dev/null || echo "000")
-    FRONTEND_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:6000 2>/dev/null || echo "000")
+    FRONTEND_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5500 2>/dev/null || echo "000")
     
     if [ "$BACKEND_HEALTH" == "200" ] && [ "$FRONTEND_HEALTH" == "200" ]; then
         break
@@ -200,7 +200,7 @@ echo ""
 echo -e "${BLUE}Version:${NC} v${VERSION}"
 echo -e "${BLUE}Commit:${NC} ${COMMIT_HASH}"
 echo -e "${BLUE}Backend:${NC} http://localhost:9000"
-echo -e "${BLUE}Frontend:${NC} http://localhost:6000"
+echo -e "${BLUE}Frontend:${NC} http://localhost:5500"
 echo ""
 echo -e "${BLUE}To view logs:${NC}"
 echo "  docker-compose -f docker-compose.prod.yml logs -f"

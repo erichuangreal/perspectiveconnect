@@ -40,7 +40,7 @@ services:
     environment:
       NEXT_PUBLIC_API_BASE: http://localhost:9000
     ports:
-      - "6000:6000"
+      - "5500:5500"
     depends_on:
       - backend
 

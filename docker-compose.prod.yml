@@ -46,7 +46,7 @@ services:
     environment:
       NEXT_PUBLIC_API_BASE: ${NEXT_PUBLIC_API_BASE:-https://pc.appfounder.ca/api}
     ports:
-      - "127.0.0.1:6000:6000"
+      - "127.0.0.1:5500:5500"
     depends_on:
       - backend
     restart: always
