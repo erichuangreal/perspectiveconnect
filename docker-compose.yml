@@ -6,7 +6,7 @@ services:
       MYSQL_ROOT_PASSWORD: rootpass
       MYSQL_DATABASE: perspectiveconnect
     ports:
-      - "3306:3306"
+      - "3308:3306"
     volumes:
       - pc_mysql_data:/var/lib/mysql
     healthcheck:
@@ -40,7 +40,7 @@ services:
     environment:
       NEXT_PUBLIC_API_BASE: http://localhost:9000
     ports:
-      - "4000:4000"
+      - "6000:6000"
     depends_on:
       - backend
 

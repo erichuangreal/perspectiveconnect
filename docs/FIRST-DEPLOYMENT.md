@@ -202,7 +202,7 @@ Already up to date.
 
 Version: v20260204_143022
 Backend:  http://localhost:9000
-Frontend: http://localhost:4000
+Frontend: http://localhost:6000
 ```
 
 ---
@@ -218,8 +218,8 @@ docker-compose -f docker-compose.prod.yml ps
 ```
 NAME            IMAGE           STATUS          PORTS
 pc_backend      pc_backend      Up 2 minutes    127.0.0.1:9000->9000/tcp
-pc_frontend     pc_frontend     Up 2 minutes    127.0.0.1:4000->4000/tcp
-pc_mysql        mysql:8.0       Up 2 minutes    127.0.0.1:3306->3306/tcp
+pc_frontend     pc_frontend     Up 2 minutes    127.0.0.1:6000->6000/tcp
+pc_mysql        mysql:8.0       Up 2 minutes    127.0.0.1:3308->3306/tcp
 ```
 
 **All services should show "Up".**
@@ -230,7 +230,7 @@ curl http://localhost:9000/docs
 # Should return HTML
 
 # Test frontend
-curl http://localhost:4000
+curl http://localhost:6000
 # Should return HTML
 ```
 
@@ -524,7 +524,7 @@ git pull origin main  # or your branch name
 docker-compose -f docker-compose.prod.yml logs
 
 # Check if ports are available
-sudo netstat -tulpn | grep -E '4000|9000|3306'
+sudo netstat -tulpn | grep -E '6000|9000|3308'
 
 # Restart services
 docker-compose -f docker-compose.prod.yml restart
@@ -542,7 +542,7 @@ sudo ufw status
 
 # Test locally
 curl http://localhost:9000/docs
-curl http://localhost:4000
+curl http://localhost:6000
 ```
 
 ### Database Connection Error

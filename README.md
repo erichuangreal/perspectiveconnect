@@ -101,7 +101,7 @@ npm run dev
 ```
 
 **4. Access Application**
-- Frontend: http://localhost:4000
+- Frontend: http://localhost:6000
 - Backend API: http://localhost:9000
    - API Docs: http://localhost:9000/docs
 
@@ -305,7 +305,7 @@ curl -X POST http://localhost:9000/auth/login \
 ```
 
 ### Test Practice Workflow
-1. Visit http://localhost:4000
+1. Visit http://localhost:6000
 2. Register/login
 3. Go to Practice page
 4. Record a short speech (20-40 seconds)
