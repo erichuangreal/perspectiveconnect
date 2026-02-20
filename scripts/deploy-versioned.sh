@@ -84,7 +84,7 @@ echo ""
 echo -e "${YELLOW}🔧 Step 3: Building new version...${NC}"
 
 # Build with version tags
-docker-compose -f docker-compose.prod.yml build \
+docker compose -f docker-compose.prod.yml build \
     --build-arg VERSION="${VERSION}" \
     --build-arg COMMIT="${COMMIT_HASH}"
 
@@ -98,10 +98,10 @@ echo ""
 echo -e "${YELLOW}🔄 Step 4: Deploying new version...${NC}"
 
 # Stop current services gracefully
-docker-compose -f docker-compose.prod.yml down
+docker compose -f docker-compose.prod.yml down
 
 # Start new services
-docker-compose -f docker-compose.prod.yml up -d
+docker compose -f docker-compose.prod.yml up -d
 
 echo ""
 echo -e "${YELLOW}⏳ Step 5: Waiting for services to be ready...${NC}"
@@ -109,7 +109,7 @@ echo -e "${YELLOW}⏳ Step 5: Waiting for services to be ready...${NC}"
 # Wait for containers to be healthy
 echo "Checking MySQL..."
 for i in {1..30}; do
-    if docker-compose -f docker-compose.prod.yml ps mysql | grep -q "healthy"; then
+    if docker compose -f docker-compose.prod.yml ps mysql | grep -q "healthy"; then
         echo "MySQL is ready"
         break
     fi
@@ -160,10 +160,10 @@ else
     
     # Show recent logs to help debug
     echo -e "${YELLOW}Recent backend logs:${NC}"
-    docker-compose -f docker-compose.prod.yml logs --tail=20 backend
+    docker compose -f docker-compose.prod.yml logs --tail=20 backend
     echo ""
     echo -e "${YELLOW}Recent frontend logs:${NC}"
-    docker-compose -f docker-compose.prod.yml logs --tail=20 frontend
+    docker compose -f docker-compose.prod.yml logs --tail=20 frontend
     echo ""
     
     # Save failure info
@@ -178,7 +178,7 @@ EOF
     
     echo -e "${RED}Deployment failed. Services are still running for debugging.${NC}"
     echo -e "${YELLOW}Run './debug-deployment.sh' for detailed diagnostics${NC}"
-    echo -e "${YELLOW}Or check logs: docker-compose -f docker-compose.prod.yml logs -f${NC}"
+    echo -e "${YELLOW}Or check logs: docker compose -f docker-compose.prod.yml logs -f${NC}"
     echo ""
     echo "After fixing issues, run './deploy-versioned.sh' again"
     exit 1
@@ -203,7 +203,7 @@ echo -e "${BLUE}Backend:${NC} http://localhost:9000"
 echo -e "${BLUE}Frontend:${NC} http://localhost:5500"
 echo ""
 echo -e "${BLUE}To view logs:${NC}"
-echo "  docker-compose -f docker-compose.prod.yml logs -f"
+echo "  docker compose -f docker-compose.prod.yml logs -f"
 echo ""
 echo -e "${BLUE}To rollback:${NC}"
 echo "  ./rollback.sh"
