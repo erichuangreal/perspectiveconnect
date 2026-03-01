@@ -366,12 +366,6 @@ sudo systemctl status perspectiveconnect-frontend
 
 ---
 
-## 📝 License
-
-This project is licensed under the MIT License.
-
----
-
 ## 🆘 Support & Troubleshooting
 
 ### Common Issues
@@ -414,12 +408,6 @@ sudo netstat -tulpn | grep 9000
 - [ ] Custom coaching prompts
 - [ ] Export session reports (PDF)
 - [ ] Integration with video platforms
-
----
-
-## 👥 Authors
-
-**Your Name** - Initial work
 
 ---
 
