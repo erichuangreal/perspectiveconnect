@@ -9,6 +9,9 @@ PerspectiveConnect helps users improve their public speaking and presentation sk
 ![Node](https://img.shields.io/badge/node-18+-green.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
+## 🔗 Links
+- 🌐 Live Demo: https://pc.appfounder.ca/
+
 ---
 
 ## ✨ Features
