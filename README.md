@@ -1,4 +1,4 @@
-# 🎤 PerspectiveConnect
+# PerspectiveConnect
 
 **AI-Powered Presentation Training Platform**
 
@@ -9,14 +9,14 @@ PerspectiveConnect helps users improve their public speaking and presentation sk
 ![Node](https://img.shields.io/badge/node-18+-green.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-## 🔗 Links
-- 🌐 Live Demo: https://pc.appfounder.ca/
+## Links
+- Live Demo: https://pc.appfounder.ca/
 
 ---
 
-## ✨ Features
+## Features
 
-### 🎯 Core Features
+### Core Features
 - **Audio Recording** - Record presentations directly in the browser
 - **AI Transcription** - Powered by OpenAI Whisper for accurate speech-to-text
 - **Voice Analysis** - Deep analysis of pitch, pacing, loudness, and clarity
@@ -24,13 +24,13 @@ PerspectiveConnect helps users improve their public speaking and presentation sk
 - **Progress Tracking** - Monitor improvement across multiple sessions
 - **Session History** - Review past performances and feedback
 
-### 📊 Analytics
+### Analytics
 - **Delivery Metrics** - Speech rate, pitch variation, loudness stability
 - **Content Analysis** - Filler word detection, sentence structure analysis
 - **Performance Scores** - Overall, delivery, and content scores
 - **Visual Feedback** - Flags for issues like rushed pacing or monotone delivery
 
-### 🎨 User Experience
+### User Experience
 - **Modern UI** - Clean, responsive interface with glassmorphism design
 - **Theme Selector** - Multiple beautiful background themes
 - **Real-time Progress** - Visual feedback during AI processing
@@ -38,7 +38,7 @@ PerspectiveConnect helps users improve their public speaking and presentation sk
 
 ---
 
-## 🏗️ Tech Stack
+## Tech Stack
 
 ### Backend
 - **FastAPI** - Modern Python web framework
@@ -61,7 +61,7 @@ PerspectiveConnect helps users improve their public speaking and presentation sk
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Python 3.11+
@@ -110,12 +110,12 @@ npm run dev
 
 ---
 
-## 📦 Production Deployment
+## Production Deployment
 
-### 🆕 First Time Deployment
+### First Time Deployment
 
 **Never deployed before?** Start here:  
-👉 **[FIRST-DEPLOYMENT.md](./docs/FIRST-DEPLOYMENT.md)** - Complete step-by-step guide (30-45 min)
+**[FIRST-DEPLOYMENT.md](./docs/FIRST-DEPLOYMENT.md)** - Complete step-by-step guide (30-45 min)
 
 ### Quick Production Setup (5 minutes)
 
@@ -173,7 +173,7 @@ See [DEPLOYMENT-CHEATSHEET.md](./DEPLOYMENT-CHEATSHEET.md) for common commands.
 
 ---
 
-## 📖 API Documentation
+## API Documentation
 
 Once the backend is running, visit:
 - **Interactive API Docs**: http://localhost:9000/docs
@@ -194,7 +194,7 @@ Once the backend is running, visit:
 
 ---
 
-## 🏛️ Project Structure
+## Project Structure
 
 ```
 perspectiveconnect/
@@ -259,7 +259,7 @@ perspectiveconnect/
 
 ---
 
-## 🔧 Configuration
+## Configuration
 
 ### Backend Environment Variables
 
@@ -292,7 +292,7 @@ NEXT_PUBLIC_API_BASE=http://localhost:9000
 
 ---
 
-## 🧪 Testing
+## Testing
 
 ### Test Registration & Login
 ```bash
@@ -317,7 +317,7 @@ curl -X POST http://localhost:9000/auth/login \
 
 ---
 
-## 📊 Monitoring
+## Monitoring
 
 ### View Logs
 
@@ -346,20 +346,20 @@ sudo systemctl status perspectiveconnect-frontend
 
 ---
 
-## 🔒 Security
+## Security
 
-- ✅ JWT authentication with secure secret
-- ✅ Password hashing with bcrypt
-- ✅ Environment variable management
-- ✅ SQL injection protection (SQLAlchemy ORM)
-- ✅ CORS configuration
-- ✅ HTTPS/SSL support
-- ✅ Input validation with Pydantic
-- ✅ API key protection
+- JWT authentication with secure secret
+- Password hashing with bcrypt
+- Environment variable management
+- SQL injection protection (SQLAlchemy ORM)
+- CORS configuration
+- HTTPS/SSL support
+- Input validation with Pydantic
+- API key protection
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -369,7 +369,7 @@ sudo systemctl status perspectiveconnect-frontend
 
 ---
 
-## 🆘 Support & Troubleshooting
+## Support & Troubleshooting
 
 ### Common Issues
 
@@ -401,7 +401,7 @@ sudo netstat -tulpn | grep 9000
 
 ---
 
-## 🎯 Roadmap
+## Roadmap
 
 - [ ] Real-time speech analysis during recording
 - [ ] Advanced analytics dashboard with charts
@@ -414,14 +414,10 @@ sudo netstat -tulpn | grep 9000
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - OpenAI for Whisper and GPT-4o
 - FastAPI framework
 - Next.js and React teams
 - librosa and Parselmouth libraries
 - All open-source contributors
-
----
-
-**Built with ❤️ using AI-powered technologies**
